@@ -1,0 +1,18 @@
+.registration__title {
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    margin-top: 60px;
+    margin-bottom: 0;
+    max-width: 330px;
+    color: white;
+    align-self: center;
+}
+
+@media screen and (max-width: 470px) {
+    .registration__title {
+        font-size: 20px;
+    }
+};

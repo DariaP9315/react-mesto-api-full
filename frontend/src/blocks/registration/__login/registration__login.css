@@ -1,0 +1,9 @@
+.registration__login {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.21;
+}

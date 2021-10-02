@@ -1,0 +1,12 @@
+.registration__login-link {
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+    align-self: center;
+    transition: opacity 0.1s linear;
+    cursor: pointer;
+}
+
+.registration__login-link:hover {
+    opacity: 0.5;
+}

@@ -6,11 +6,10 @@ function RegistrationForm(props) {
         <section className='registration'>
             <h2 className='registration__title'>{props.title}</h2>
             <form
-                className='registration__form'
                 name={props.name}
                 onSubmit={props.onSubmit}
                 noValidate>
-                <fieldset className='registration__input'>
+                <fieldset className='registration__form'>
                     {props.children}
                     <button
                         className='registration__submit-button'
@@ -21,7 +20,7 @@ function RegistrationForm(props) {
                         <div className='registration__login'>
                             <p className='registration__login-caption'>Уже зарегистрированы?&nbsp;</p>
                             <Link
-                                to='/sign-in'
+                                to='/signin'
                                 className='registration__login-link'>Войти</Link>
                         </div>
                     }

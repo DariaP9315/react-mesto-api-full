@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.mesto-krasivoe.nomoredomains.club';
 
 function checkResponse(res) {
     if (res.ok) {
@@ -42,6 +42,14 @@ export const checkToken = (token) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
         }
+    })
+        .then(checkResponse);
+}
+
+export const signOut = () => {
+    return fetch(`${BASE_URL}/signout`, {
+        method: 'DELETE',
+        credentials: 'include',
     })
         .then(checkResponse);
 }

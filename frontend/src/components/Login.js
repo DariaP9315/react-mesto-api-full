@@ -38,7 +38,7 @@ function Login(props) {
         required />
       <input
         className='registration__input'
-        minLength='6'
+        minLength='8'
         value={password}
         type='password'
         name='password'

@@ -29,6 +29,8 @@ app.use(cors({
   origin: [
     'https://mesto-krasivoe.nomoredomains.club',
     'https://api.mesto-krasivoe.nomoredomains.club',
+    'http://mesto-krasivoe.nomoredomains.club',
+    'http://api.mesto-krasivoe.nomoredomains.club',
     'http://localhost:3000',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],

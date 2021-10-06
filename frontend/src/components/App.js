@@ -38,7 +38,7 @@ function App() {
 
   const [statusIcon, setStatusIcon] = React.useState(null);
   const history = useHistory();
-
+  
   React.useEffect(() => {
     Promise.all([
       api.getUserData(),
@@ -48,18 +48,14 @@ function App() {
         setCurrentUser(userData);
         setCards(cards);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+  }, [loggedIn]);
 
-    if (localStorage.getItem('jwt')) {
-      auth.checkToken(localStorage.getItem('jwt'))
-        .then((res) => {
-          setLoggedIn(true);
-          setUserEmail(res.data.email);
-          history.push('/');
-        })
-        .catch((err) => console.log(err));
+  React.useEffect(() => {
+    if (loggedIn) {
+      history.push('/')
     }
-  }, []);
+  }, [loggedIn, history]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);

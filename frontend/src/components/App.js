@@ -56,6 +56,20 @@ function App() {
       history.push('/')
     }
   }, [loggedIn, history]);
+  
+  const handleCheckToken = React.useCallback(() => {
+    auth.checkToken()
+      .then((res) => {
+        setLoggedIn(true);
+        setUserEmail(res.email);
+        history.push('/');
+      })
+      .catch((err) => console.log(err))
+  }, [history]);
+
+  React.useEffect(() => {
+    handleCheckToken();
+  }, [handleCheckToken]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -167,7 +181,6 @@ function App() {
       .then((res) => {
         setLoggedIn(true);
         setUserEmail(email);
-        localStorage.setItem('jwt', res.token);
         history.push('/');
       })
       .catch(err => console.log(err));
@@ -177,7 +190,6 @@ function App() {
     history.push('/signin');
     setUserEmail('');
     setLoggedIn(false);
-    localStorage.removeItem('jwt');
   }
 
 

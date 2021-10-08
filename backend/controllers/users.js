@@ -22,7 +22,7 @@ module.exports.login = (req, res, next) => {
           sameSite: 'None',
           secure: true,
         })
-        .send({ token });
+        res.send({ email: user.email, _id: user._id, message: 'Успешный вход' });
     })
     .catch((err) => {
       next(new UnauthorizedError(`Произошла ошибка: ${err.message}`));

@@ -179,6 +179,7 @@ function App() {
   function handleLogin({ email, password }) {
     auth.authorize(email, password)
       .then((res) => {
+        handleCheckToken();
         setLoggedIn(true);
         setUserEmail(email);
         history.push('/');
@@ -187,9 +188,13 @@ function App() {
   }
 
   function handleLogOut() {
-    history.push('/signin');
-    setUserEmail('');
-    setLoggedIn(false);
+    auth.signOut()
+      .then(() => {
+        history.push('/signin');
+        setUserEmail('');
+        setLoggedIn(false);
+      })
+      .catch(err => console.log(err));
   }
 
 

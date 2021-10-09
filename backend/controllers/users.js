@@ -22,7 +22,7 @@ module.exports.login = (req, res, next) => {
           sameSite: 'None',
           secure: true,
         })
-        res.send({ email: user.email, _id: user._id, message: 'Успешный вход' });
+       .send({ token });
     })
     .catch((err) => {
       next(new UnauthorizedError(`Произошла ошибка: ${err.message}`));
@@ -101,17 +101,21 @@ module.exports.getCurrentUser = (req, res, next) => {
 
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    {
+      new: true,
+      runValidators: true,
+    },
+  )
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь с указанным _id не найден');
+      if (user === null) {
+        throw new NotFoundError('Пользователь с указанным _id не найден.');
+      } else {
+        res.send(user);
       }
-      return res.send(user);
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля' });
-      } else res.status(500).send({ message: 'На сервере произошла ошибка' });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

@@ -26,6 +26,24 @@ class Api {
     })
       .then(this._checkRequestResult)
   }
+  
+  likeCard(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: this._headers,
+        })
+            .then(this._checkRequestResult);
+    }
+
+    unlikeCard(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: this._headers,
+        })
+            .then(this._checkRequestResult);
+    }
 
   changeLikeCardStatus(id, isLiked) {
     return fetch(`${this._baseUrl}/cards/likes/${id}`, {

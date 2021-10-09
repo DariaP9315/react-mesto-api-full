@@ -178,7 +178,7 @@ function App() {
 
   function handleLogin({ email, password }) {
     auth.authorize(email, password)
-      .then((res) => {
+      .then(() => {
         handleCheckToken();
         setLoggedIn(true);
         setUserEmail(email);

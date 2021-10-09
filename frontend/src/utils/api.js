@@ -45,14 +45,13 @@ class Api {
             .then(this._checkRequestResult);
     }
 
-  changeLikeCardStatus(id, isLiked) {
-    return fetch(`${this._baseUrl}/cards/likes/${id}`, {
-      method: `${isLiked ? 'PUT' : 'DELETE'}`,
-      credentials: 'include',
-      headers: this._headers,
-    })
-      .then(this._checkRequestResult)
-  }
+   changeLikeCardStatus(cardId, isLiked) {
+        if(isLiked) {
+            return this.likeCard(cardId);
+        } else {
+            return this.unlikeCard(cardId);
+        }
+    }
 
   postCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {

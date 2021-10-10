@@ -70,8 +70,8 @@ app.delete('/signout', signOut);
 
 app.use(auth);
 
-app.use('/users', usersRoute);
-app.use('/cards', cardsRoute);
+app.use('/users', usersRouter);
+app.use('/cards', cardsRouter);
 
 app.use('*', () => {
   throw new NotFoundError('Ресурс не найден');

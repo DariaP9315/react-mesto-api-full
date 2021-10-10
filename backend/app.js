@@ -15,9 +15,10 @@ const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-error'); // 404
 
 const { PORT = 3000 } = process.env;
-
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
   origin: [
@@ -33,11 +34,12 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
-// Подлключение к БД mestodb
-mongoose.connect('mongodb://localhost:27017/mestodb');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+});
 
 app.use(requestLogger);
 
@@ -66,14 +68,13 @@ app.post('/signup', celebrate({
 
 app.delete('/signout', signOut);
 
-// авторизация
 app.use(auth);
 
 app.use('/users', usersRoute);
 app.use('/cards', cardsRoute);
 
 app.use('*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не существует');
+  throw new NotFoundError('Ресурс не найден');
 });
 
 app.use(errorLogger);

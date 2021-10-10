@@ -1,39 +1,86 @@
 class Api {
-  constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;
-    this._headers = headers;
-  }
-
-  _checkRequestResult(res) {
-    if (res.ok) {
-      return res.json()
+    constructor({ baseUrl, headers }) {
+        this._baseUrl = baseUrl;
+        this._headers = headers;
     }
-    return Promise.reject(res.status)
-  }
 
-  getUserData() {
-    return fetch(`${this._baseUrl}/users/me`, {
-      credentials: 'include',
-      headers: this._headers
-    })
-      .then(this._checkRequestResult)
-  }
+    _checkResponse(res) {
+        if (res.ok) {
+            return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+    }
 
-  getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
-      credentials: 'include',
-      headers: this._headers
-    })
-      .then(this._checkRequestResult)
-  }
-  
-  likeCard(cardId) {
+    getInitialCards() {
+        return fetch(`${this._baseUrl}/cards`, {
+            credentials: 'include',
+            headers: this._headers
+        })
+            .then(this._checkResponse);
+    }
+
+    getUserInfo() {
+        return fetch(`${this._baseUrl}/users/me`, {
+            credentials: 'include',
+            headers: this._headers
+        })
+            .then(this._checkResponse);
+    }
+
+    setUserInfo({name, about}) {
+        return fetch(`${this._baseUrl}/users/me`, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: `${name}`,
+                about: `${about}`
+            })
+        })
+            .then(this._checkResponse);
+    }
+
+    editAvatar({ avatar }) {
+        return fetch(`${this._baseUrl}/users/me/avatar`, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar: `${avatar}`
+            })
+        })
+            .then(this._checkResponse);
+    }
+
+    addCard({ name, link }) {
+        return fetch(`${this._baseUrl}/cards`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: `${name}`,
+                link: `${link}`
+            })
+        })
+            .then(this._checkResponse);
+    }
+
+    deleteCard(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: this._headers,
+        })
+            .then(this._checkResponse);
+    }
+
+    likeCard(cardId) {
         return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
             method: 'PUT',
             credentials: 'include',
             headers: this._headers,
         })
-            .then(this._checkRequestResult);
+            .then(this._checkResponse);
     }
 
     unlikeCard(cardId) {
@@ -42,63 +89,16 @@ class Api {
             credentials: 'include',
             headers: this._headers,
         })
-            .then(this._checkRequestResult);
+            .then(this._checkResponse);
     }
 
-   changeLikeCardStatus(cardId, isLiked) {
+    changeLikeCardStatus(cardId, isLiked) {
         if(isLiked) {
             return this.likeCard(cardId);
         } else {
             return this.unlikeCard(cardId);
         }
     }
-
-  postCard({ name, link }) {
-    return fetch(`${this._baseUrl}/cards`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: `${name}`,
-        link: `${link}`
-      })
-    })
-      .then(this._checkRequestResult)
-  }
-
-  deleteCard(id) {
-    return fetch(`${this._baseUrl}/cards/${id}`, {
-      method: `DELETE`,
-      credentials: 'include',
-      headers: this._headers,
-    })
-      .then(this._checkRequestResult)
-  }
-
-  updateUserData({ name, about }) {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: this._headers,
-      body: JSON.stringify({
-        name: `${name}`,
-        about: `${about}`
-      })
-    })
-      .then(this._checkRequestResult)
-  }
-
-  updateAvatar({ avatar }) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar: `${avatar}`,
-      }),
-    })
-      .then(this._checkRequestResult);
-  }
 }
 
 const api = new Api({

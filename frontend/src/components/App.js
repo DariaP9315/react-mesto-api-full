@@ -39,7 +39,7 @@ function App() {
   const [statusIcon, setStatusIcon] = React.useState(null);
   const history = useHistory();
   
-  useEffect(() => {
+  React.useEffect(() => {
     Promise.all([
       api.getUserData(),
       api.getInitialCards()
@@ -51,7 +51,7 @@ function App() {
       .catch(err => console.log(err))
   }, [loggedIn]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (loggedIn) {
       history.push('/')
     }
@@ -67,7 +67,7 @@ function App() {
       .catch((err) => console.log(err))
   }, [history]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     handleCheckToken();
   }, [handleCheckToken]);
 
@@ -198,7 +198,7 @@ function App() {
   }
 
 
-  useEffect(() => {
+  React.useEffect(() => {
     (isEditProfilePopupOpen || isEditAvatarPopupOpen ||
       isAddPlacePopupOpen || isInfoTooltipOpen ||
       selectedCard.name !== '') &&

@@ -19,13 +19,6 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(cookieParser());
-
-// Подлключение к БД mestodb
-mongoose.connect('mongodb://localhost:27017/mestodb');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(cors({
   origin: [
     'https://mesto-krasivoe.nomoredomains.club',
@@ -39,6 +32,12 @@ app.use(cors({
   credentials: true,
   optionsSuccessStatus: 200,
 }));
+
+// Подлключение к БД mestodb
+mongoose.connect('mongodb://localhost:27017/mestodb');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 

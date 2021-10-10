@@ -19,7 +19,7 @@ class Api {
             .then(this._checkResponse);
     }
 
-    getUserInfo() {
+    getUserData() {
         return fetch(`${this._baseUrl}/users/me`, {
             credentials: 'include',
             headers: this._headers
@@ -27,7 +27,7 @@ class Api {
             .then(this._checkResponse);
     }
 
-    setUserInfo({name, about}) {
+    updateUserData({name, about}) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             credentials: 'include',
@@ -40,7 +40,7 @@ class Api {
             .then(this._checkResponse);
     }
 
-    editAvatar({ avatar }) {
+    updateAvatar({ avatar }) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
             credentials: 'include',
@@ -52,7 +52,7 @@ class Api {
             .then(this._checkResponse);
     }
 
-    addCard({ name, link }) {
+    postCard({ name, link }) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
             credentials: 'include',

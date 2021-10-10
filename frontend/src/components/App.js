@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from './Header.js';
 import Main from './Main.js';
@@ -39,7 +40,7 @@ function App() {
   const [statusIcon, setStatusIcon] = React.useState(null);
   const history = useHistory();
   
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([
       api.getUserData(),
       api.getInitialCards()
@@ -51,7 +52,7 @@ function App() {
       .catch(err => console.log(err))
   }, [loggedIn]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (loggedIn) {
       history.push('/')
     }
@@ -67,7 +68,7 @@ function App() {
       .catch((err) => console.log(err))
   }, [history]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleCheckToken();
   }, [handleCheckToken]);
 
@@ -198,7 +199,7 @@ function App() {
   }
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     (isEditProfilePopupOpen || isEditAvatarPopupOpen ||
       isAddPlacePopupOpen || isInfoTooltipOpen ||
       selectedCard.name !== '') &&

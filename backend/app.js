@@ -34,12 +34,7 @@ app.use(cors({
   optionsSuccessStatus: 200,
 }));
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+mongoose.connect('mongodb://localhost:27017/mestodb');
 
 app.use(requestLogger);
 

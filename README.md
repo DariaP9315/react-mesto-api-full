@@ -3,5 +3,7 @@
  
  
 Публичный IP-адрес: 178.154.223.97
+
 Домен: https://mesto-krasivoe.nomoredomains.club/
+
 Backend: https://api.mesto-krasivoe.nomoredomains.club/

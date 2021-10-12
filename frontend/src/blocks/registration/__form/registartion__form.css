@@ -1,0 +1,9 @@
+.registration__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0;
+    border: none;
+    max-width: 360px;
+}

@@ -1,0 +1,21 @@
+.registration {
+    max-width: 358px;
+    height: auto;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    position: relative;
+}
+
+@media screen and (max-width: 740px) {
+    .registration {
+        padding: 25px 36px;
+    }
+}
+
+@media screen and (max-width: 470px) {
+    .registration {
+        max-width: calc(100% - 38px);
+    }
+}

@@ -1,0 +1,23 @@
+.header__auth-info {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    text-decoration: none;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'Inter', Arial, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 1.22;
+    margin-top: 6px;
+    padding: 0;
+}
+
+@media screen and (max-width: 900px) {
+    .header__auth-info {
+        margin-right: 27px;
+        font-size: 14px;
+        line-height: 1.21;
+    }
+}

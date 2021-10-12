@@ -2,15 +2,17 @@ const Card = require('../models/card');
 
 const BadRequestError = require('../errors/bad-request-err'); // 400
 const ForbiddenError = require('../errors/forbidden-err'); // 403
-const NotFoundError = require('../errors/not-found-error'); // 404
+const NotFoundError = require('../errors/not-found-err'); // 404
 
-module.exports.getCards = (req, res, next) => Card.find({})
-  .then((cards) => res.send(cards))
-  .catch(next);
+module.exports.getCards = (req, res, next) => {
+  Card.find({})
+    .then((cards) => res.send(cards))
+    .catch(next);
+};
 
 module.exports.createCard = (req, res, next) => {
-  const { name, link } = req.body;
   const owner = req.user._id;
+  const { name, link } = req.body;
 
   Card.create({ name, link, owner })
     .then((card) => res.send(card))
@@ -29,11 +31,12 @@ module.exports.deleteCard = (req, res, next) => {
       if (card === null) {
         throw new NotFoundError('Карточка с указанным _id не найдена.');
       }
-      if (card.owner.toString() === req.user._id) {
-        return Card.deleteOne(card)
+      if (card.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('Недостаточно прав для удаления карточки.');
+      } else {
+        Card.deleteOne(card)
           .then(() => res.send(card));
       }
-      throw new ForbiddenError('Недостаточно прав для удаления карточки.');
     })
     .catch((err) => {
       if (err.name === 'CastError') {

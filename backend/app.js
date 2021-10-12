@@ -2,45 +2,54 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
+const { celebrate, Joi, errors } = require('celebrate');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const cors = require('cors');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-const usersRouter = require('./routes/users');
-const cardsRouter = require('./routes/cards');
-const { login, createUser, signOut } = require('./controllers/users');
-const error = require('./middlewares/error');
-const auth = require('./middlewares/auth');
 
-const NotFoundError = require('./errors/not-found-error'); // 404
+const usersRoute = require('./routes/users');
+const cardsRoute = require('./routes/cards');
+const { login, createUser, signOut } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+const error = require('./middlewares/error');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
+const NotFoundError = require('./errors/not-found-err'); // 404
 
 const { PORT = 3000 } = process.env;
-
 const app = express();
 
-const corsOptions = {
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
+app.use(limiter);
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({
   origin: [
     'https://mesto-krasivoe.nomoredomains.club',
     'https://api.mesto-krasivoe.nomoredomains.club',
     'http://mesto-krasivoe.nomoredomains.club',
-    'https://mesto-krasivoe.nomoredomains.club',
+    'http://api.mesto-krasivoe.nomoredomains.club',
     'http://localhost:3000',
   ],
-  methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
   credentials: true,
-};
+  optionsSuccessStatus: 200,
+}));
 
-app.use(cookieParser());
-app.use(cors(corsOptions));
-
-// Подлключение к БД mestodb
-mongoose.connect('mongodb://localhost:27017/mestodb');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+});
 
 app.use(requestLogger);
 
@@ -69,21 +78,17 @@ app.post('/signup', celebrate({
 
 app.delete('/signout', signOut);
 
-// авторизация
 app.use(auth);
 
-app.use(usersRouter);
-app.use(cardsRouter);
+app.use('/users', usersRoute);
+app.use('/cards', cardsRoute);
 
 app.use('*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не существует');
+  throw new NotFoundError('Ресурс не найден');
 });
 
 app.use(errorLogger);
 app.use(errors());
 app.use(error);
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Сервер запущен на порту ${PORT}`);
-});
+app.listen(PORT);

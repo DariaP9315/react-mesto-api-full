@@ -15,26 +15,32 @@ const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/not-found-error'); // 404
 
 const { PORT = 3000 } = process.env;
+
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(cors({
+const corsOptions = {
   origin: [
     'https://mesto-krasivoe.nomoredomains.club',
     'https://api.mesto-krasivoe.nomoredomains.club',
     'http://mesto-krasivoe.nomoredomains.club',
-    'http://api.mesto-krasivoe.nomoredomains.club',
+    'https://mesto-krasivoe.nomoredomains.club',
     'http://localhost:3000',
   ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  allowedHeaders: ['Authorization', 'Content-Type'],
+  methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
   credentials: true,
-  optionsSuccessStatus: 200,
-}));
+};
 
+app.use(cookieParser());
+app.use(cors(corsOptions));
+
+// Подлключение к БД mestodb
 mongoose.connect('mongodb://localhost:27017/mestodb');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
@@ -63,13 +69,14 @@ app.post('/signup', celebrate({
 
 app.delete('/signout', signOut);
 
+// авторизация
 app.use(auth);
 
-app.use('/users', usersRouter);
-app.use('/cards', cardsRouter);
+app.use(usersRouter);
+app.use(cardsRouter);
 
 app.use('*', () => {
-  throw new NotFoundError('Ресурс не найден');
+  throw new NotFoundError('Запрашиваемый ресурс не существует');
 });
 
 app.use(errorLogger);
